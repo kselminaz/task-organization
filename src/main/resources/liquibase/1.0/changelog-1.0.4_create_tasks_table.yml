@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: Create_tasks_table
+      author: Selminaz Kerimli
+      changes:
+        - createTable:
+            tableName: tasks
+            columns:
+                  - column:
+                      name: id
+                      type: bigint
+                      autoIncrement: true
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: name
+                      type: varchar(255)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: description
+                      type: text
+                  - column:
+                      name: created_by_user
+                      type: bigint
+                      constraints:
+                        foreignKeyName: fk_tasks_to_user
+                        references: users(id)
+                        nullable: false
+                  - column:
+                      name: status
+                      type: varchar(16)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: deadline
+                      type: timestamp
+                  - column:
+                      name: priority
+                      type: int
+                  - column:
+                      name: project_id
+                      type: bigint
+                      constraints:
+                        foreignKeyName: fk_tasks_to_projects
+                        references: projects(id)
+                  - column:
+                      name: category_id
+                      type: bigint
+                      constraints:
+                        foreignKeyName: fk_tasks_to_categories
+                        references: categories(id)
+                  - column:
+                        name: created_at
+                        type: timestamp
+                        defaultValue: now()
+                        constraints:
+                          nullable: false
+                  - column:
+                        name: updated_at
+                        type: timestamp
+                        defaultValue: now()
+                        constraints:
+                          nullable: false
+
+            remarks: Table to store tasks
