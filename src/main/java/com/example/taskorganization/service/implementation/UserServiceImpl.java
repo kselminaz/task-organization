@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
 
         if(!user.isEnabled()) throw new UserDisabledException("User mail is not confirmed");
 
-        authenticationManager.authenticate(
+        var auth=authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
         return jwtUtil.generateTokens(user);
