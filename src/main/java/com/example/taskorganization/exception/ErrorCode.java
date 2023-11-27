@@ -21,6 +21,4 @@ public enum ErrorCode {
 
     INCORRECT_PASSWORD
 
-
-
 }

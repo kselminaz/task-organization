@@ -47,8 +47,8 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     //testing
-    implementation 'org.apache.groovy:groovy:4.0.13'
-    testImplementation 'org.spockframework:spock-spring:2.4-M1-groovy-4.0'
+    implementation("org.apache.groovy:groovy:4.0.13")
+    testImplementation("org.spockframework:spock-spring:2.4-M1-groovy-4.0")
     testImplementation("io.github.benas:random-beans:3.9.0")
 
 

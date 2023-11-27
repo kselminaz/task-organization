@@ -17,6 +17,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -27,6 +31,8 @@ public class SecurityConfig {
 
     private final UserRepository userRepository;
     private final AuthRequestFilter authRequestFilter;
+
+    private final DataSource dataSource;
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -44,10 +50,18 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth.requestMatchers("v1/user/change-password").permitAll());
 
         http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
+        http.rememberMe(rememberMe -> rememberMe.tokenRepository(persistentTokenRepository()));
 
         http.apply(new AuthFilterConfigurerAdapter(authRequestFilter));
         return http.build();
 
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        return tokenRepository;
     }
 
 

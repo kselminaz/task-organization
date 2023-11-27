@@ -1,6 +1,7 @@
 package com.example.taskorganization.service.implementation;
 
 import com.example.taskorganization.annotation.Log;
+import com.example.taskorganization.config.security.SignedUserDetails;
 import com.example.taskorganization.dao.entity.TaskEntity;
 import com.example.taskorganization.dao.repository.CategoryRepository;
 import com.example.taskorganization.dao.repository.ProjectRepository;
@@ -34,13 +35,9 @@ import static lombok.AccessLevel.PRIVATE;
 public class TaskServiceImpl implements TaskService {
 
     TaskRepository taskRepository;
-
     ProjectRepository projectRepository;
-
     CategoryRepository categoryRepository;
     SortingUtil sortingUtil;
-
-    UserDetailsServiceImpl userDetailsService;
 
     private TaskEntity fetchTaskIfExist(Long id) {
         return taskRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format(
@@ -49,7 +46,7 @@ public class TaskServiceImpl implements TaskService {
     }
     private Long getSignedUserId(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return userDetailsService.signedUser(authentication.getName()).getId();
+        return  ((SignedUserDetails) authentication.getPrincipal()).getUserId();
     }
 
     @Override

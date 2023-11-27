@@ -1,6 +1,7 @@
 package com.example.taskorganization.service.implementation;
 
 import com.example.taskorganization.annotation.Log;
+import com.example.taskorganization.annotation.LogIgnore;
 import com.example.taskorganization.dao.entity.ChangePasswordEntity;
 import com.example.taskorganization.dao.repository.ChangePasswordRepository;
 import com.example.taskorganization.exception.*;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void signUp(SignUpRequest signUpRequest,HttpServletRequest request) {
+    public void signUp(@LogIgnore SignUpRequest signUpRequest,HttpServletRequest request) {
 
         var user = userRepository.findByUsernameOrEmail(signUpRequest.getUsername(), signUpRequest.getEmail());
 
@@ -88,7 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public SignInResponse signIn(SignInRequest request) {
+    public SignInResponse signIn(@LogIgnore SignInRequest request) {
 
         var user = userRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername()).
                 orElseThrow(() ->new UserNotExistsException("User with username or email not exists"));
@@ -130,7 +131,7 @@ public class UserServiceImpl implements UserService {
         )));
     }
     @Override
-    public void changePassword(ChangePasswordRequest request) {
+    public void changePassword(@LogIgnore ChangePasswordRequest request) {
 
         var changePasswordEntity=changePasswordRepository.findByCodeAndExpirationTimeAfter(request.getCode(), LocalDateTime.now()).orElseThrow(() -> new NotFoundException(String.format(
                 "User with this reset password code [%s] was not found or code time is expired", request.getCode()
@@ -143,6 +144,7 @@ public class UserServiceImpl implements UserService {
                 orElseThrow(() ->new UserNotExistsException("User with this reset code not exists"));
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
         changePasswordRepository.delete(changePasswordEntity);
 
     }

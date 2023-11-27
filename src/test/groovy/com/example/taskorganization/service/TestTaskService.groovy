@@ -1,5 +1,6 @@
 package com.example.taskorganization.service
 
+import com.example.taskorganization.config.security.SignedUserDetails
 import com.example.taskorganization.dao.entity.CategoryEntity
 import com.example.taskorganization.dao.entity.ProjectEntity
 import com.example.taskorganization.dao.entity.TaskEntity
@@ -7,12 +8,11 @@ import com.example.taskorganization.dao.repository.CategoryRepository
 import com.example.taskorganization.dao.repository.ProjectRepository
 import com.example.taskorganization.dao.repository.TaskRepository
 import com.example.taskorganization.exception.NotFoundException
-
+import com.example.taskorganization.mapper.TaskMapper
 import com.example.taskorganization.model.enums.TaskStatus
 import com.example.taskorganization.model.request.TaskUpdateRequest
 import com.example.taskorganization.service.abstraction.TaskService
 import com.example.taskorganization.service.implementation.TaskServiceImpl
-import com.example.taskorganization.service.implementation.UserDetailsServiceImpl
 import com.example.taskorganization.util.SortingUtil
 import io.github.benas.randombeans.EnhancedRandomBuilder
 import io.github.benas.randombeans.api.EnhancedRandom
@@ -27,7 +27,6 @@ class TestTaskService extends Specification {
     ProjectRepository projectRepository
     CategoryRepository categoryRepository
     SortingUtil sortingUtil
-    UserDetailsServiceImpl userDetailsService
     TaskService taskService
     Authentication authentication
     void setup() {
@@ -35,9 +34,8 @@ class TestTaskService extends Specification {
         taskRepository = Mock()
         projectRepository = Mock()
         categoryRepository = Mock()
-        userDetailsService = Mock()
-        authentication=new UsernamePasswordAuthenticationToken("test", "", null);
-        taskService = new TaskServiceImpl(taskRepository, projectRepository, categoryRepository, sortingUtil, userDetailsService)
+        authentication=new UsernamePasswordAuthenticationToken(new SignedUserDetails(1,"test","test@gmail.com"), "", null);
+        taskService = new TaskServiceImpl(taskRepository, projectRepository, categoryRepository, sortingUtil)
 
     }
 

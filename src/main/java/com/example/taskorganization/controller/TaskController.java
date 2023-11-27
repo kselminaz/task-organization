@@ -1,5 +1,7 @@
 package com.example.taskorganization.controller;
 
+import com.example.taskorganization.config.security.SignedUserDetails;
+import com.example.taskorganization.dao.entity.UserEntity;
 import com.example.taskorganization.model.criteria.PageCriteria;
 import com.example.taskorganization.model.criteria.SortingCriteria;
 import com.example.taskorganization.model.enums.TaskStatus;
@@ -10,6 +12,9 @@ import com.example.taskorganization.model.response.TaskResponse;
 import com.example.taskorganization.service.abstraction.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -35,25 +40,26 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public void saveProduct(@Valid @RequestBody TaskSaveRequest request) {
+    public void saveTask(@Valid @RequestBody TaskSaveRequest request) {
+
         taskService.saveTask(request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
-    public void deleteProduct(@PathVariable Long id) {
+    public void deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
-    public void updateProduct(@PathVariable Long id, @RequestBody TaskUpdateRequest request) {
+    public void updateTask(@PathVariable Long id, @RequestBody TaskUpdateRequest request) {
         taskService.updateTask(id, request);
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
-    public void updateProductWithStatus(@PathVariable Long id, @RequestParam TaskStatus status) {
+    public void updateTaskWithStatus(@PathVariable Long id, @RequestParam TaskStatus status) {
         taskService.updateTaskWithStatus(id, status);
     }
 

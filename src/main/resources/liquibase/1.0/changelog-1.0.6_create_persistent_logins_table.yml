@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: Create_persistent_logins_table
+      author: Selminaz Kerimli
+      changes:
+        - createTable:
+            tableName: persistent_logins
+            columns:
+                  - column:
+                      name: username
+                      type: varchar(64)
+                      constraints:
+                        nullable: false
+                  - column:
+                      name: series
+                      type: varchar(64)
+                      constraints:
+                        primaryKey: true
+                        nullable: false
+                  - column:
+                      name: token
+                      type: varchar(64)
+                      constraints:
+                        nullable: false
+                  - column:
+                        name: last_used
+                        type: timestamp
+                        constraints:
+                          nullable: false
+            remarks: Table to store remember me tokens

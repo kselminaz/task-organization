@@ -1,5 +1,6 @@
 package com.example.taskorganization.service.implementation;
 
+import com.example.taskorganization.config.security.SignedUserDetails;
 import com.example.taskorganization.service.abstraction.AuthService;
 import com.example.taskorganization.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,7 +48,13 @@ public class AuthServiceImpl implements AuthService {
 
     private Authentication getAuthentication(Claims claims) {
 
-        return new UsernamePasswordAuthenticationToken(claims.get("username"), "", null);
+        SignedUserDetails signedUserDetails = new SignedUserDetails(
+                Long.valueOf(claims.get("userId").toString()),
+                claims.get("username").toString(),
+                claims.get("username").toString()
+        );
+
+        return new UsernamePasswordAuthenticationToken(signedUserDetails, "", null);
     }
 
 }
